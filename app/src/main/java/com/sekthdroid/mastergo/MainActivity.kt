@@ -1,4 +1,4 @@
-package com.nateebo.mastergo
+package com.sekthdroid.mastergo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.nateebo.mastergo.ui.theme.MastergoTheme
+import com.sekthdroid.mastergo.theme.MastergoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
