@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_title_1">Proven specialists</string>
+    <string name="onboarding_description_1">We check each specialist before he starts work</string>
+
+    <string name="onboarding_title_2">Honest ratings</string>
+    <string name="onboarding_description_2">We carefully check each specialist and put honest ratings</string>
+
+    <string name="onboarding_title_3">Insured orders</string>
+    <string name="onboarding_description_3">We insure each order for the amount of $500</string>
+
+    <string name="onboarding_title_4">Create order</string>
+    <string name="onboarding_description_4">It\'s easy, just click on the plus</string>
+</resources>
