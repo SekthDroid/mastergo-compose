@@ -1,4 +1,4 @@
-package com.nateebo.mastergo.ui.theme
+package com.sekthdroid.mastergo.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
