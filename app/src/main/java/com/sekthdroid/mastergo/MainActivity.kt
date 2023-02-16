@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.sekthdroid.mastergo.onboarding.OnboardingScreen
+import com.sekthdroid.mastergo.signin.SigningIn
 import com.sekthdroid.mastergo.theme.MastergoTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +21,8 @@ class MainActivity : ComponentActivity() {
             MastergoTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    OnboardingScreen()
+                    // OnboardingScreen()
+                    SigningIn()
                 }
             }
         }

@@ -97,29 +97,39 @@ fun OnboardingScreen(onAddButtonClicked: () -> Unit = {}) {
                             .padding(32.dp)
                     )
 
-                    Button(
+                    BasicButton(
+                        text = "Next",
                         onClick = {
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         },
-                        shape = RoundedCornerShape(2.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Green),
                         modifier = Modifier
-                            .height(60.dp)
                             .padding(horizontal = 24.dp)
                             .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Next",
-                            color = Color.White,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp
-                        )
-                    }
+                    )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun BasicButton(text: String, onClick: () -> Unit = {}, modifier: Modifier = Modifier) {
+    Button(
+        onClick = onClick,
+        shape = RoundedCornerShape(2.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = Green),
+        modifier = Modifier
+            .height(60.dp)
+            .then(modifier)
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 16.sp
+        )
     }
 }
 
