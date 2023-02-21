@@ -20,7 +20,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +32,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +45,7 @@ import com.sekthdroid.mastergo.onboarding.BasicButton
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, widthDp = 375, heightDp = 812)
 @Composable
-fun SigningInScreen() {
+fun SigningUpScreen() {
     Scaffold(
         topBar = {
             Box(
@@ -61,7 +62,7 @@ fun SigningInScreen() {
                 }
 
                 Text(
-                    text = "Sign In",
+                    text = "Sign Up",
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
                     modifier = Modifier.align(Alignment.Center)
@@ -76,7 +77,7 @@ fun SigningInScreen() {
                 .fillMaxSize()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.img_signing_header),
+                painter = painterResource(id = R.drawable.img_signup_header),
                 contentDescription = "",
                 modifier = Modifier
                     .padding(vertical = 16.dp)
@@ -94,7 +95,7 @@ fun SigningInScreen() {
                     onValueChange = {
                         usernameValue = it
                     },
-                    decorationBox = {
+                    decorationBox = { innerTextField ->
                         if (usernameValue.isEmpty()) {
                             Text(
                                 text = "Username",
@@ -102,7 +103,7 @@ fun SigningInScreen() {
                                 color = Color(0xFFB0B0C3)
                             )
                         }
-                        it()
+                        innerTextField()
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -115,23 +116,19 @@ fun SigningInScreen() {
                 var passwordValue by remember { mutableStateOf("") }
                 PasswordInput(
                     value = passwordValue,
-                    placeHolder = "Password",
+                    placeHolder = "Enter password",
                     onValueChanged = { text -> passwordValue = text }
                 )
 
-                TextButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.align(Alignment.End)
-                ) {
-                    Text(
-                        text = "Forgot your password?",
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color(0xFF838391)
-                    )
-                }
+                var passwordRepeatValue by remember { mutableStateOf("") }
+                PasswordInput(
+                    value = passwordRepeatValue,
+                    placeHolder = "Confirm password",
+                    onValueChanged = { text -> passwordRepeatValue = text }
+                )
 
                 BasicButton(
-                    text = "Login",
+                    text = "Sign Up",
                     onClick = {
                         // TODO: 15/2/23
                     },
@@ -173,11 +170,11 @@ fun SigningInScreen() {
                 ClickableText(
                     text = buildAnnotatedString {
                         withStyle(SpanStyle(color = Color(0xFF838391))) {
-                            append("Don't have an account? ")
+                            append("Already have an account? ")
                         }
-                        pushStringAnnotation("signup", "signup")
+                        pushStringAnnotation("signin", "signin")
                         withStyle(SpanStyle(color = Color(0xFFFFB19D))) {
-                            append("Sign Up")
+                            append("Sign in")
                         }
                         pop()
                     },
@@ -190,5 +187,3 @@ fun SigningInScreen() {
         }
     }
 }
-
-val LightGray = Color(0xFFF7F7F7)
