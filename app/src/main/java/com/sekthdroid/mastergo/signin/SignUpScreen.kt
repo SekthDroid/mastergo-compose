@@ -32,15 +32,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sekthdroid.mastergo.R
-import com.sekthdroid.mastergo.onboarding.BasicButton
+import com.sekthdroid.mastergo.common.PrimaryButton
+import com.sekthdroid.mastergo.common.PasswordInput
+import com.sekthdroid.mastergo.theme.LightGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, widthDp = 375, heightDp = 812)
@@ -127,7 +127,7 @@ fun SigningUpScreen() {
                     onValueChanged = { text -> passwordRepeatValue = text }
                 )
 
-                BasicButton(
+                PrimaryButton(
                     text = "Sign Up",
                     onClick = {
                         // TODO: 15/2/23

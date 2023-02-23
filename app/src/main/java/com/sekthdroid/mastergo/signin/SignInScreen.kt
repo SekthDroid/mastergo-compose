@@ -1,7 +1,6 @@
 package com.sekthdroid.mastergo.signin
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -22,10 +19,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,36 +34,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sekthdroid.mastergo.R
-import com.sekthdroid.mastergo.onboarding.BasicButton
+import com.sekthdroid.mastergo.common.PrimaryButton
+import com.sekthdroid.mastergo.common.DefaultInput
+import com.sekthdroid.mastergo.common.PasswordInput
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, widthDp = 375, heightDp = 812)
 @Composable
 fun SigningInScreen() {
-    Scaffold(
-        topBar = {
-            Box(
-                modifier = Modifier.fillMaxWidth()
+    Scaffold(topBar = {
+        Box(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            IconButton(
+                onClick = {}, modifier = Modifier.align(alignment = Alignment.CenterStart)
             ) {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.align(alignment = Alignment.CenterStart)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_arrow_left),
-                        contentDescription = "Back"
-                    )
-                }
-
-                Text(
-                    text = "Sign In",
-                    fontWeight = FontWeight.SemiBold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.align(Alignment.Center)
+                Image(
+                    painter = painterResource(id = R.drawable.ic_arrow_left),
+                    contentDescription = "Back"
                 )
             }
+
+            Text(
+                text = "Sign In",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                modifier = Modifier.align(Alignment.Center)
+            )
         }
-    ) {
+    }) {
         Column(
             modifier = Modifier
                 .padding(it)
@@ -88,40 +82,23 @@ fun SigningInScreen() {
                 modifier = Modifier.fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.Bottom)
             ) {
-                var usernameValue by remember { mutableStateOf("") }
-                BasicTextField(
+                val (usernameValue, setUsername) = remember { mutableStateOf("") }
+                val (passwordValue, setPassword) = remember { mutableStateOf("") }
+
+                DefaultInput(
                     value = usernameValue,
-                    onValueChange = {
-                        usernameValue = it
-                    },
-                    decorationBox = {
-                        if (usernameValue.isEmpty()) {
-                            Text(
-                                text = "Username",
-                                fontWeight = FontWeight.Medium,
-                                color = Color(0xFFB0B0C3)
-                            )
-                        }
-                        it()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .background(LightGray)
-                        .padding(horizontal = 16.dp)
-                        .wrapContentHeight(align = Alignment.CenterVertically),
+                    onValueChanged = setUsername,
+                    label = "Username"
                 )
 
-                var passwordValue by remember { mutableStateOf("") }
                 PasswordInput(
                     value = passwordValue,
-                    placeHolder = "Password",
-                    onValueChanged = { text -> passwordValue = text }
+                    onValueChanged = setPassword,
+                    placeHolder = "Password"
                 )
 
                 TextButton(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier.align(Alignment.End)
+                    onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.End)
                 ) {
                     Text(
                         text = "Forgot your password?",
@@ -130,7 +107,7 @@ fun SigningInScreen() {
                     )
                 }
 
-                BasicButton(
+                PrimaryButton(
                     text = "Login",
                     onClick = {
                         // TODO: 15/2/23
@@ -159,36 +136,29 @@ fun SigningInScreen() {
                             .aspectRatio(1.5f)
                     )
                     SocialNetworkSignButton(
-                        icon = R.drawable.ic_linkedin,
-                        onClick = {
+                        icon = R.drawable.ic_linkedin, onClick = {
 
-                        },
-                        modifier = Modifier
+                        }, modifier = Modifier
                             .weight(1f)
                             .aspectRatio(1.5f)
                     )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-                ClickableText(
-                    text = buildAnnotatedString {
-                        withStyle(SpanStyle(color = Color(0xFF838391))) {
-                            append("Don't have an account? ")
-                        }
-                        pushStringAnnotation("signup", "signup")
-                        withStyle(SpanStyle(color = Color(0xFFFFB19D))) {
-                            append("Sign Up")
-                        }
-                        pop()
-                    },
-                    onClick = {
-                        println("Clicked on signup")
-                    },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ClickableText(text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = Color(0xFF838391))) {
+                        append("Don't have an account? ")
+                    }
+                    pushStringAnnotation("signup", "signup")
+                    withStyle(SpanStyle(color = Color(0xFFFFB19D))) {
+                        append("Sign Up")
+                    }
+                    pop()
+                }, onClick = {
+                    println("Clicked on signup")
+                }, modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
             }
         }
     }
 }
-
-val LightGray = Color(0xFFF7F7F7)

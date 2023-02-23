@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.sekthdroid.mastergo.categories.CategoriesScreen
 import com.sekthdroid.mastergo.signin.SigningInScreen
 import com.sekthdroid.mastergo.signin.SigningUpScreen
 import com.sekthdroid.mastergo.theme.MastergoTheme
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     // OnboardingScreen()
                     // SigningInScreen()
-                    SigningUpScreen()
+                    // SigningUpScreen()
+                    CategoriesScreen()
                 }
             }
         }
