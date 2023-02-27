@@ -22,3 +22,4 @@ gradle.xml
 .externalNativeBuild
 .cxx
 local.properties
+.idea/

@@ -36,7 +36,7 @@ fun AppToolbar(title: String) {
         }
 
         Text(
-            text = "Sign In",
+            text = title,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
             modifier = Modifier.align(Alignment.Center)
