@@ -40,6 +40,42 @@ import com.sekthdroid.mastergo.common.PrimaryButton
 import com.sekthdroid.mastergo.common.SearchInput
 import com.sekthdroid.mastergo.common.SecondaryButton
 
+data class Category(
+    val id: String,
+    val icon: Int,
+    val name: String
+)
+
+private fun getItems(): List<Category> {
+    return listOf(
+        Category(
+            id = "furniture-works",
+            icon = R.drawable.ic_furniture,
+            name = "Furniture Works"
+        ),
+        Category(
+            id = "cleaning-services",
+            icon = R.drawable.ic_cleaning,
+            name = "Cleaning services"
+        ),
+        Category(
+            id = "equipment-repair",
+            icon = R.drawable.ic_equipment,
+            name = "Equipment repair"
+        ),
+        Category(
+            id = "courier-services",
+            icon = R.drawable.ic_courier,
+            name = "Courier services"
+        ),
+        Category(
+            id = "interior-designs",
+            icon = R.drawable.ic_interior,
+            name = "Interior designs"
+        )
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -56,6 +92,7 @@ fun CategoriesScreen() {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             val (search, setSearch) = remember { mutableStateOf("") }
+            val categories = remember { getItems() }
 
             SearchInput(value = search, onValueChanged = setSearch, label = "Search by category")
 
@@ -63,8 +100,14 @@ fun CategoriesScreen() {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(listOf(1, 2, 3, 4)) {
-                    CategoryItem()
+                items(categories) {
+                    CategoryItem(
+                        icon = it.icon,
+                        title = it.name,
+                        onClick = {
+
+                        }
+                    )
                 }
             }
 
@@ -88,16 +131,15 @@ fun CategoriesScreen() {
     }
 }
 
-@Preview(showBackground = true, widthDp = 400, heightDp = 100)
 @Composable
-fun CategoryItem() {
+fun CategoryItem(icon: Int, title: String, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .height(80.dp)
             .fillMaxWidth()
             .border(1.dp, color = Color(0xFFE2E2E0))
-            .padding(end = 16.dp)
-            .clickable {  },
+            .clickable { onClick() }
+            .padding(end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
@@ -108,13 +150,13 @@ fun CategoryItem() {
                 .background(color = Color(0xFFE2E2E0))
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_furniture),
+                painter = painterResource(id = icon),
                 contentDescription = ""
             )
         }
 
         Text(
-            text = "Furniture Works",
+            text = title,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             color = Color(0xFF838391)
