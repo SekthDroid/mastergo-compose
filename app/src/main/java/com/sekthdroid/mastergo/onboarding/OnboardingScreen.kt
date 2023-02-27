@@ -4,22 +4,11 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,6 +29,8 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.sekthdroid.mastergo.R
+import com.sekthdroid.mastergo.common.PrimaryButton
+import com.sekthdroid.mastergo.common.RoundedButton
 import kotlinx.coroutines.launch
 
 val Green = Color(0xFF20C3AF)
@@ -97,56 +88,19 @@ fun OnboardingScreen(onAddButtonClicked: () -> Unit = {}) {
                             .padding(32.dp)
                     )
 
-                    Button(
+                    PrimaryButton(
+                        text = "Next",
                         onClick = {
                             coroutineScope.launch {
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         },
-                        shape = RoundedCornerShape(2.dp),
-                        colors = ButtonDefaults.buttonColors(backgroundColor = Green),
                         modifier = Modifier
-                            .height(60.dp)
                             .padding(horizontal = 24.dp)
                             .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = "Next",
-                            color = Color.White,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp
-                        )
-                    }
+                    )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun RoundedButton(onAddButtonClicked: () -> Unit) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Button(
-            onClick = onAddButtonClicked,
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(backgroundColor = Green),
-            modifier = Modifier
-                .sizeIn(
-                    minWidth = 48.dp,
-                    minHeight = 48.dp,
-                    maxWidth = 82.dp,
-                    maxHeight = 82.dp
-                )
-                .aspectRatio(1f)
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Add,
-                contentDescription = "",
-                tint = Color.White
-            )
         }
     }
 }
