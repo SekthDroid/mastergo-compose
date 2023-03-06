@@ -21,12 +21,12 @@ fun AppToolbarPreview() {
 }
 
 @Composable
-fun AppToolbar(title: String) {
+fun AppToolbar(title: String, onBackClicked: () -> Unit = {}) {
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
         IconButton(
-            onClick = {},
+            onClick = onBackClicked,
             modifier = Modifier.align(alignment = Alignment.CenterStart)
         ) {
             Image(
