@@ -77,7 +77,6 @@ private fun getItems(): List<Category> {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
 fun CategoriesScreen(onMenuClick: () -> Unit) {
     Scaffold(

@@ -47,10 +47,20 @@ class MainActivity : ComponentActivity() {
                     val onMenuClick: () -> Unit = remember {
                         { state.toogleState() }
                     }
-                    SwipeMenu(state, onMenuItemClick = {
-                        state.selected.value = it
-                        state.toogleState()
-                    }) {
+                    SwipeMenu(
+                        swipeMenuState = state,
+                        onMenuItemClick = {
+                            state.selected.value = it
+                            state.toogleState()
+                            when (it) {
+                                MenuOption.Profile -> controller.navigate("profile")
+                                MenuOption.Home -> controller.navigate("categories")
+                                else -> {
+
+                                }
+                            }
+                        }
+                    ) {
                         NavHost(navController = controller, startDestination = "categories") {
                             composable("categories") {
                                 CategoriesScreen(
@@ -58,7 +68,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("profile") {
-
+                                ProfileScreen(
+                                    onBackClicked = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        }
+                                    },
+                                    onMenuClick = onMenuClick
+                                )
                             }
                             composable("messages") {
 
