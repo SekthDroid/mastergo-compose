@@ -21,12 +21,12 @@ fun AppToolbarPreview() {
 }
 
 @Composable
-fun AppToolbar(title: String) {
+fun AppToolbar(title: String = "", onBackClicked: () -> Unit = {}, onMenuClick: () -> Unit = {}) {
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
         IconButton(
-            onClick = {},
+            onClick = onBackClicked,
             modifier = Modifier.align(alignment = Alignment.CenterStart)
         ) {
             Image(
@@ -41,6 +41,16 @@ fun AppToolbar(title: String) {
             fontSize = 18.sp,
             modifier = Modifier.align(Alignment.Center)
         )
+
+        IconButton(
+            onClick = onMenuClick,
+            modifier = Modifier.align(alignment = Alignment.CenterEnd)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_menu),
+                contentDescription = "Menu"
+            )
+        }
     }
 
 }
