@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sekthdroid.mastergo.categories.CategoriesScreen
 import com.sekthdroid.mastergo.common.AppToolbar
 import com.sekthdroid.mastergo.notifications.NotificationsScreen
+import com.sekthdroid.mastergo.settings.SettingsScreen
 import com.sekthdroid.mastergo.theme.MastergoTheme
 
 class MainActivity : ComponentActivity() {
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {
-                        NavHost(navController = controller, startDestination = "categories") {
+                        NavHost(navController = controller, startDestination = "settings") {
                             composable("categories") {
                                 CategoriesScreen(
                                     onMenuClick = onMenuClick
@@ -90,7 +91,29 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("settings") {
+                                SettingsScreen(
+                                    onBackClicked = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        }
+                                    },
+                                    onMenuClicked = onMenuClick,
+                                    onPaymentClicked = {
 
+                                    },
+                                    onWriteClicked = {
+
+                                    },
+                                    onRateClicked = {
+
+                                    },
+                                    onAbout = {
+
+                                    },
+                                    onLogout = {
+                                        
+                                    }
+                                )
                             }
                         }
                     }
