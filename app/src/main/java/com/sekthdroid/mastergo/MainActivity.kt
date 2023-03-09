@@ -26,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sekthdroid.mastergo.categories.CategoriesScreen
 import com.sekthdroid.mastergo.common.AppToolbar
+import com.sekthdroid.mastergo.notifications.NotificationsScreen
 import com.sekthdroid.mastergo.theme.MastergoTheme
 
 class MainActivity : ComponentActivity() {
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
                             when (it) {
                                 MenuOption.Profile -> controller.navigate("profile")
                                 MenuOption.Home -> controller.navigate("categories")
+                                MenuOption.Messages -> controller.navigate("messages")
                                 else -> {
 
                                 }
@@ -78,7 +80,14 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("messages") {
-
+                                NotificationsScreen(
+                                    onBackClicked = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        }
+                                    },
+                                    onMenuClicked = onMenuClick
+                                )
                             }
                             composable("settings") {
 
