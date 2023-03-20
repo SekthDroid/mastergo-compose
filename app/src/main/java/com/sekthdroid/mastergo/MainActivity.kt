@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sekthdroid.mastergo.categories.CategoriesScreen
 import com.sekthdroid.mastergo.common.AppToolbar
 import com.sekthdroid.mastergo.notifications.NotificationsScreen
+import com.sekthdroid.mastergo.settings.PaymentCardsScreen
 import com.sekthdroid.mastergo.settings.SettingsScreen
 import com.sekthdroid.mastergo.theme.MastergoTheme
 
@@ -99,7 +100,7 @@ class MainActivity : ComponentActivity() {
                                     },
                                     onMenuClicked = onMenuClick,
                                     onPaymentClicked = {
-
+                                        controller.navigate("payments")
                                     },
                                     onWriteClicked = {
 
@@ -111,9 +112,12 @@ class MainActivity : ComponentActivity() {
 
                                     },
                                     onLogout = {
-                                        
+
                                     }
                                 )
+                            }
+                            composable("payments") {
+                                PaymentCardsScreen()
                             }
                         }
                     }
