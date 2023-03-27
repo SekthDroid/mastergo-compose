@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -69,7 +70,8 @@ fun SearchInput(value: String, onValueChanged: (String) -> Unit, label: String =
                 .fillMaxWidth()
                 .height(60.dp)
                 .padding(horizontal = 16.dp)
-                .wrapContentHeight(align = Alignment.CenterVertically)
+                .wrapContentHeight(align = Alignment.CenterVertically),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
         ) {
             if (value.isEmpty()) {
                 Text(

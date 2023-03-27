@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.sekthdroid.mastergo.categories.CategoriesItemsScreen
 import com.sekthdroid.mastergo.categories.CategoriesScreen
 import com.sekthdroid.mastergo.notifications.NotificationsScreen
 import com.sekthdroid.mastergo.payments.PaymentCardsScreen
@@ -62,9 +63,25 @@ class MainActivity : ComponentActivity() {
                             composable("categories") {
                                 CategoriesScreen(
                                     onBackClicked = {
-                                        println("onBackClicked categories ${state.menuState.value}")
                                         if (state.isExpanded) {
                                             state.toogleState()
+                                        }
+                                    },
+                                    onMenuClick = onMenuClick,
+                                    onCategoryClicked = {
+                                        controller.navigate("categories/${it.id}/items")
+                                    }
+                                )
+                            }
+                            composable("categories/{id}/items") {
+                                val category = it.arguments?.getString("id").orEmpty()
+                                CategoriesItemsScreen(
+                                    categoryId = category,
+                                    onBackClick = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        } else {
+                                            controller.popBackStack()
                                         }
                                     },
                                     onMenuClick = onMenuClick

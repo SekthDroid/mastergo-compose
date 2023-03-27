@@ -29,50 +29,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sekthdroid.mastergo.R
+import com.sekthdroid.mastergo.categories.data.CategoriesProvider
+import com.sekthdroid.mastergo.categories.domain.Category
 import com.sekthdroid.mastergo.common.AppToolbar
 import com.sekthdroid.mastergo.common.PrimaryButton
 import com.sekthdroid.mastergo.common.SearchInput
 import com.sekthdroid.mastergo.common.SecondaryButton
 
-data class Category(
-    val id: String,
-    val icon: Int,
-    val name: String
-)
-
-private fun getItems(): List<Category> {
-    return listOf(
-        Category(
-            id = "furniture-works",
-            icon = R.drawable.ic_furniture,
-            name = "Furniture Works"
-        ),
-        Category(
-            id = "cleaning-services",
-            icon = R.drawable.ic_cleaning,
-            name = "Cleaning services"
-        ),
-        Category(
-            id = "equipment-repair",
-            icon = R.drawable.ic_equipment,
-            name = "Equipment repair"
-        ),
-        Category(
-            id = "courier-services",
-            icon = R.drawable.ic_courier,
-            name = "Courier services"
-        ),
-        Category(
-            id = "interior-designs",
-            icon = R.drawable.ic_interior,
-            name = "Interior designs"
-        )
-    )
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoriesScreen(onMenuClick: () -> Unit, onBackClicked: () -> Unit) {
+fun CategoriesScreen(
+    onMenuClick: () -> Unit,
+    onBackClicked: () -> Unit,
+    onCategoryClicked: (Category) -> Unit
+) {
     Scaffold(
         topBar = {
             AppToolbar(
@@ -85,13 +55,23 @@ fun CategoriesScreen(onMenuClick: () -> Unit, onBackClicked: () -> Unit) {
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(24.dp),
+                .padding(30.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             val (search, setSearch) = remember { mutableStateOf("") }
-            val categories = remember { getItems() }
+            val categories = remember(search) {
+                if (search.isEmpty()) {
+                    CategoriesProvider.getItems()
+                } else {
+                    CategoriesProvider.findCategories(search)
+                }
+            }
 
-            SearchInput(value = search, onValueChanged = setSearch, label = "Search by category")
+            SearchInput(
+                value = search,
+                onValueChanged = setSearch,
+                label = "Search by category"
+            )
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -101,9 +81,7 @@ fun CategoriesScreen(onMenuClick: () -> Unit, onBackClicked: () -> Unit) {
                     CategoryItem(
                         icon = it.icon,
                         title = it.name,
-                        onClick = {
-
-                        }
+                        onClick = { onCategoryClicked(it) }
                     )
                 }
             }
@@ -115,13 +93,13 @@ fun CategoriesScreen(onMenuClick: () -> Unit, onBackClicked: () -> Unit) {
                 SecondaryButton(
                     text = "Back",
                     onClick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth(.5f)
+                    modifier = Modifier.weight(1f)
                 )
 
                 PrimaryButton(
                     text = "Next",
                     onClick = { /*TODO*/ },
-                    modifier = Modifier.fillMaxWidth(1f)
+                    modifier = Modifier.weight(1f)
                 )
             }
         }
