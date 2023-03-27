@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.BottomDrawerValue
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.rememberBottomDrawerState
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
@@ -36,7 +39,11 @@ class MainActivity : ComponentActivity() {
                     val controller = rememberNavController()
                     val state = rememberSwipeMenuState(items = MenuOption.values().toList())
                     val onMenuClick: () -> Unit = remember {
-                        { state.toogleState() }
+                        {
+                            println("onMenuClick")
+                            state.toogleState()
+                            println("onMenuClick ${state.menuState.value}")
+                        }
                     }
                     SwipeMenu(
                         swipeMenuState = state,
@@ -47,9 +54,7 @@ class MainActivity : ComponentActivity() {
                                 MenuOption.Profile -> controller.navigate("profile")
                                 MenuOption.Home -> controller.navigate("categories")
                                 MenuOption.Messages -> controller.navigate("messages")
-                                else -> {
-
-                                }
+                                MenuOption.Settings -> controller.navigate("settings")
                             }
                         }
                     ) {
@@ -57,6 +62,7 @@ class MainActivity : ComponentActivity() {
                             composable("categories") {
                                 CategoriesScreen(
                                     onBackClicked = {
+                                        println("onBackClicked categories ${state.menuState.value}")
                                         if (state.isExpanded) {
                                             state.toogleState()
                                         }
@@ -164,15 +170,16 @@ class SwipeMenuState(
         selected.value = option
     }
 
-    val isExpanded: Boolean = menuState.value == MenuState.Expanded
+    val isExpanded: Boolean
+        get() = menuState.value == MenuState.Expanded
 }
 
 @Composable
 fun rememberSwipeMenuState(items: List<MenuOption>): SwipeMenuState = remember {
     SwipeMenuState(
-        items = items, selected = mutableStateOf(items.first()), menuState = mutableStateOf(
-            MenuState.Collapsed
-        )
+        items = items,
+        selected = mutableStateOf(items.first()),
+        menuState = mutableStateOf(MenuState.Collapsed)
     )
 }
 
