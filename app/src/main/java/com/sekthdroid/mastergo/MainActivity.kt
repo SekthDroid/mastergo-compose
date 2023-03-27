@@ -4,30 +4,22 @@ import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sekthdroid.mastergo.categories.CategoriesScreen
-import com.sekthdroid.mastergo.common.AppToolbar
 import com.sekthdroid.mastergo.notifications.NotificationsScreen
-import com.sekthdroid.mastergo.settings.PaymentCardsScreen
+import com.sekthdroid.mastergo.payments.PaymentCardsScreen
+import com.sekthdroid.mastergo.payments.CardScreen
 import com.sekthdroid.mastergo.settings.SettingsScreen
 import com.sekthdroid.mastergo.theme.MastergoTheme
 
@@ -40,10 +32,6 @@ class MainActivity : ComponentActivity() {
             MastergoTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    // OnboardingScreen()
-                    // SigningInScreen()
-                    // SigningUpScreen()
-                    // CategoriesScreen()
 
                     val controller = rememberNavController()
                     val state = rememberSwipeMenuState(items = MenuOption.values().toList())
@@ -65,9 +53,14 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {
-                        NavHost(navController = controller, startDestination = "settings") {
+                        NavHost(navController = controller, startDestination = "categories") {
                             composable("categories") {
                                 CategoriesScreen(
+                                    onBackClicked = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        }
+                                    },
                                     onMenuClick = onMenuClick
                                 )
                             }
@@ -117,7 +110,33 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("payments") {
-                                PaymentCardsScreen()
+                                PaymentCardsScreen(
+                                    onBackClicked = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        } else {
+                                            controller.popBackStack()
+                                        }
+                                    },
+                                    onMenuClicked = onMenuClick,
+                                    onCardClicked = {
+                                        controller.navigate("card/$it")
+                                    }
+                                )
+                            }
+                            composable("card/{cardId}") { entry ->
+                                val cardId = entry.arguments?.getString("cardId").orEmpty()
+                                CardScreen(
+                                    cardId,
+                                    onBackClicked = {
+                                        if (state.isExpanded) {
+                                            state.toogleState()
+                                        } else {
+                                            controller.popBackStack()
+                                        }
+                                    },
+                                    onMenuClicked = onMenuClick,
+                                )
                             }
                         }
                     }
