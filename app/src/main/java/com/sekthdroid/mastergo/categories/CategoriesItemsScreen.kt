@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -33,14 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sekthdroid.mastergo.R
 import com.sekthdroid.mastergo.categories.data.CategoriesProvider
-import com.sekthdroid.mastergo.categories.domain.CategoryWork
 import com.sekthdroid.mastergo.common.AppToolbar
 import com.sekthdroid.mastergo.common.PrimaryButton
 import com.sekthdroid.mastergo.common.SearchInput
@@ -56,12 +52,22 @@ fun CategoriesItemsScreen(
     val parentCategory = remember(categoryId) {
         CategoriesProvider.getCategoryById(categoryId)
     }
-    val items = remember(categoryId) {
-        CategoriesProvider.getCategoryItems(categoryId)
-    }
     val (search, setSearch) = remember {
         mutableStateOf("")
     }
+    val selectedItems = remember {
+        mutableStateListOf<String>()
+    }
+    val items = remember(categoryId, search) {
+        if (search.isBlank()) {
+            CategoriesProvider.getCategoryItems(categoryId)
+        } else {
+            val regex = Regex(search, RegexOption.IGNORE_CASE)
+            CategoriesProvider.getCategoryItems(categoryId)
+                .filter { regex.containsMatchIn(it.name) }
+        }
+    }
+
     Scaffold(
         topBar = {
             AppToolbar(
@@ -77,27 +83,24 @@ fun CategoriesItemsScreen(
                 .padding(30.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            SearchInput(value = search, onValueChanged = setSearch)
-            val selectedItems = remember {
-                mutableStateListOf<CategoryWork>()
-            }
+            SearchInput(value = search, onValueChanged = setSearch, label = "Search...")
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(items) {
+                items(items, key = { it.id }) {
                     CategoryWorkItem(
                         title = it.name,
-                        isSelected = it in selectedItems,
+                        isSelected = it.id in selectedItems,
                         onClick = {
                             println("Clicked on $it")
-                            if (it in selectedItems) {
+                            if (it.id in selectedItems) {
                                 println("Removing $it")
-                                selectedItems.remove(it)
+                                selectedItems.remove(it.id)
                             } else {
                                 println("Adding $it")
-                                selectedItems.add(it)
+                                selectedItems.add(it.id)
                             }
                             println("Items $selectedItems")
                         }
@@ -145,7 +148,7 @@ fun CategoryWorkItem(
             Color(0xFFF7F7F7)
         }
     )
-    
+
     val iconColor by animateColorAsState(
         targetValue = if (isSelected) {
             Color.White
@@ -154,20 +157,26 @@ fun CategoryWorkItem(
         }
     )
 
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) {
+            Color(0xFF525464)
+        } else {
+            Color(0xFF838391)
+        }
+    )
+
     Row(
         modifier = Modifier
             .height(60.dp)
             .fillMaxWidth()
             .clickable { onClick() }
-            .border(
-                width = 1.dp,
-                color = color
-            )
+            .border(width = 2.dp, color = color)
     ) {
         Text(
             text = title,
             fontWeight = FontWeight.SemiBold,
             fontSize = 16.sp,
+            color = textColor,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()

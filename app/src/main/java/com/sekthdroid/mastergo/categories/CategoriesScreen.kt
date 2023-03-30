@@ -112,7 +112,7 @@ fun CategoryItem(icon: Int, title: String, onClick: () -> Unit) {
         modifier = Modifier
             .height(80.dp)
             .fillMaxWidth()
-            .border(1.dp, color = Color(0xFFE2E2E0))
+            .border(2.dp, color = Color(0xFFF7F7F7))
             .clickable { onClick() }
             .padding(end = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -122,7 +122,7 @@ fun CategoryItem(icon: Int, title: String, onClick: () -> Unit) {
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(80.dp)
-                .background(color = Color(0xFFE2E2E0))
+                .background(color = Color(0xFFF7F7F7))
         ) {
             Image(
                 painter = painterResource(id = icon),

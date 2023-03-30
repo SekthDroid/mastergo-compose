@@ -1,32 +1,39 @@
+@file:OptIn(ExperimentalAnimationApi::class)
+
 package com.sekthdroid.mastergo
 
 import android.os.Bundle
 import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.BottomDrawerValue
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberBottomDrawerState
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sekthdroid.mastergo.categories.CategoriesItemsScreen
 import com.sekthdroid.mastergo.categories.CategoriesScreen
 import com.sekthdroid.mastergo.notifications.NotificationsScreen
-import com.sekthdroid.mastergo.payments.PaymentCardsScreen
 import com.sekthdroid.mastergo.payments.CardScreen
+import com.sekthdroid.mastergo.payments.PaymentCardsScreen
 import com.sekthdroid.mastergo.settings.SettingsScreen
 import com.sekthdroid.mastergo.theme.MastergoTheme
 
+@OptIn(ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,13 +44,11 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
 
-                    val controller = rememberNavController()
+                    val controller = rememberAnimatedNavController()
                     val state = rememberSwipeMenuState(items = MenuOption.values().toList())
                     val onMenuClick: () -> Unit = remember {
                         {
-                            println("onMenuClick")
                             state.toogleState()
-                            println("onMenuClick ${state.menuState.value}")
                         }
                     }
                     SwipeMenu(
@@ -52,14 +57,17 @@ class MainActivity : ComponentActivity() {
                             state.selected.value = it
                             state.toogleState()
                             when (it) {
-                                MenuOption.Profile -> controller.navigate("profile")
-                                MenuOption.Home -> controller.navigate("categories")
-                                MenuOption.Messages -> controller.navigate("messages")
-                                MenuOption.Settings -> controller.navigate("settings")
+                                MenuOption.Profile -> controller.navigateOriginScreen("profile")
+                                MenuOption.Home -> controller.navigateOriginScreen("categories")
+                                MenuOption.Messages -> controller.navigateOriginScreen("messages")
+                                MenuOption.Settings -> controller.navigateOriginScreen("settings")
                             }
                         }
                     ) {
-                        NavHost(navController = controller, startDestination = "categories") {
+                        AnimatedNavHost(
+                            navController = controller,
+                            startDestination = "categories"
+                        ) {
                             composable("categories") {
                                 CategoriesScreen(
                                     onBackClicked = {
@@ -73,7 +81,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable("categories/{id}/items") {
+                            childComposable("categories/{id}/items") {
                                 val category = it.arguments?.getString("id").orEmpty()
                                 CategoriesItemsScreen(
                                     categoryId = category,
@@ -132,7 +140,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable("payments") {
+                            childComposable(route = "payments") {
                                 PaymentCardsScreen(
                                     onBackClicked = {
                                         if (state.isExpanded) {
@@ -147,7 +155,7 @@ class MainActivity : ComponentActivity() {
                                     }
                                 )
                             }
-                            composable("card/{cardId}") { entry ->
+                            childComposable(route = "card/{cardId}") { entry ->
                                 val cardId = entry.arguments?.getString("cardId").orEmpty()
                                 CardScreen(
                                     cardId,
@@ -167,6 +175,36 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+}
+
+fun NavController.navigateOriginScreen(route: String) {
+    navigate(route) {
+        popUpTo(route) { inclusive = true }
+        launchSingleTop = true
+        restoreState = true
+    }
+}
+
+fun NavGraphBuilder.childComposable(
+    route: String,
+    content: @Composable() AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route = route,
+        enterTransition = {
+            slideInHorizontally { it }
+        },
+        exitTransition = {
+            slideOutHorizontally { -it }
+        },
+        popEnterTransition = {
+            slideInHorizontally { -it }
+        },
+        popExitTransition = {
+            slideOutHorizontally { it }
+        },
+        content = content
+    )
 }
 
 @Stable
